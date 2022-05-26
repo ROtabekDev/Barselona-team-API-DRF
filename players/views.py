@@ -1,4 +1,4 @@
-from turtle import title
+
 from django.forms import model_to_dict
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,17 +8,23 @@ from .models import Players
 from .serializers import PlayersSerializer
 
 class PlayersAPIView(APIView):
+   
     def get(self, request):
-        lst = Players.objects.all().values()
-        return Response({'posts': list(lst)})
+        p = Players.objects.all().values()
+        return Response({'posts': PlayersSerializer(p, many=True).data})
+
 
     def post(self, request):
+        serializer = PlayersSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+
         post_new = Players.objects.create(
             title=request.data['title'],
             content=request.data['content'],
             cat_id=request.data['cat_id']
         )
-        return Response({'post': model_to_dict(post_new)})
+        return Response({'post': PlayersSerializer(post_new).data})
 
 
 # class PlayersAPIView(generics.ListAPIView):
