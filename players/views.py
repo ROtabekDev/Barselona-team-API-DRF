@@ -2,26 +2,30 @@
 from django.forms import model_to_dict
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework import generics, viewsets
 
 from .models import Players
 from .serializers import PlayersSerializer
 
 
-class PlayersAPIList(generics.ListCreateAPIView):
+class PlayersViewSet(viewsets.ModelViewSet):
     queryset = Players.objects.all()
     serializer_class = PlayersSerializer
 
+# class PlayersAPIList(generics.ListCreateAPIView):
+#     queryset = Players.objects.all()
+#     serializer_class = PlayersSerializer
 
-class PlayersAPIUpdate(generics.UpdateAPIView):
-    queryset = Players.objects.all()
-    serializer_class = PlayersSerializer
+
+# class PlayersAPIUpdate(generics.UpdateAPIView):
+#     queryset = Players.objects.all()
+#     serializer_class = PlayersSerializer
 
 
-class PlayersAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Players.objects.all()
-    serializer_class = PlayersSerializer
-    
+# class PlayersAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Players.objects.all()
+#     serializer_class = PlayersSerializer
+
 
 # class PlayersAPIView(APIView):
    
