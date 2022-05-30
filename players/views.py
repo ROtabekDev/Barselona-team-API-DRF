@@ -7,6 +7,11 @@ from rest_framework import generics
 from .models import Players
 from .serializers import PlayersSerializer
 
+
+class PlayersAPIList(generics.ListCreateAPIView):
+    queryset = Players.objects.all()
+    serializer_class = PlayersSerializer
+
 class PlayersAPIView(APIView):
    
     def get(self, request):
