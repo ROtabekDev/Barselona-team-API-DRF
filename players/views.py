@@ -3,14 +3,33 @@ from django.forms import model_to_dict
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics, viewsets
+from rest_framework import mixins
+from rest_framework.decorators import action
 
-from .models import Players
+from .models import Category, Players
 from .serializers import PlayersSerializer
 
 
-class PlayersViewSet(viewsets.ModelViewSet):
-    queryset = Players.objects.all()
+class PlayersViewSet(mixins.CreateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.ListModelMixin,
+                    viewsets.GenericViewSet):
+    # queryset = Players.objects.all()
     serializer_class = PlayersSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get("pk")
+
+        if not pk:
+            return Players.objects.all()[:3]
+
+        return Players.objects.filter(pk=pk)
+
+    @action(detail=True, methods=["get"])
+    def category(self, request, pk=None):
+        cats = Category.objects.get(pk=pk)
+        return Response({'cats': cats.name})
 
 # class PlayersAPIList(generics.ListCreateAPIView):
 #     queryset = Players.objects.all()
